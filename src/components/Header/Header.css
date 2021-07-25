@@ -1,16 +1,53 @@
 .bg-my {
-    background: linear-gradient(0.25turn, #3f87a6, #ebf8e1, #f69d3c);
+    background: rgba(92, 184, 92, 0.62);
 }
 
-.header-font {
-    font-family: 'Courier New', monospace;
-    font-weight: bolder;
+.navbar-light .navbar-nav .nav-link {
+    color: white !important;
+    font-size: 15px;
 }
 
-header span {
-    color: white;
+.logo {
+    height: 60px;
+    width: 60px;
 }
 
-header .btn:active, header .btn:hover {
-    color: #f69d3c !important;
+a {
+    text-align: center;
 }
+
+@media all and (max-width: 750px) {
+    .logo {
+        position: absolute;
+        top: 18vh;
+        left: 41vw;
+    }
+    #basic-navbar-nav {
+        justify-content: center!important;
+        margin-top: 24vh;
+        margin-bottom: 50vh;
+    }
+    .navbar {
+        justify-content: flex-end !important;
+    }
+    .navbar-toggler {
+        border: 0 !important;
+    }
+    .navbar-toggler.collapsed .navbar-toggler-icon{
+        margin-top: 5px;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+    .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
+        margin-top: 5px;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='white' fill='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M0.324,1.909c-0.429-0.429-0.429-1.143,0-1.587c0.444-0.429,1.143-0.429,1.587,0l9.523,9.539  l9.539-9.539c0.429-0.429,1.143-0.429,1.571,0c0.444,0.444,0.444,1.159,0,1.587l-9.523,9.524l9.523,9.539  c0.444,0.429,0.444,1.143,0,1.587c-0.429,0.429-1.143,0.429-1.571,0l-9.539-9.539l-9.523,9.539c-0.444,0.429-1.143,0.429-1.587,0  c-0.429-0.444-0.429-1.159,0-1.587l9.523-9.539L0.324,1.909z'/%3e%3c/svg%3e");
+    }
+}
+
+@media all and (min-width: 750px) {
+
+    #basic-navbar-nav {
+        justify-content: space-between !important;
+    }
+}
+
+

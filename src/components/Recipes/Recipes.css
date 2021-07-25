@@ -1,20 +1,64 @@
-/**
-Border Bottom
-*/
+
 .row {
     position: relative;
 }
 
-form {
-    max-width: 500px;
-    margin: auto;
+h1, h4, span {
+    font-family: none;
 }
 
-.button-right {
-    position: absolute;
-    top: 34px;
-    right: 0;
-    z-index: 1001;
+.color-gray {
+    color: #343434;
+}
+
+.color-gray-lighter {
+    color: #7a7878;
+}
+
+.btn-success {
+    background-color: rgba(92, 184, 92, 1) !important;
+    border-color: rgba(92, 184, 92, 1) !important;
+    padding: 2% 0;
+    font-size: 11px;
+}
+
+.icon {
+    font-size: 15px;
+    color: rgba(92, 184, 92, 1);
+}
+
+.icon-span {
+    font-size: 15px;
+}
+
+.stars {
+    font-size: 15px;
+}
+
+.stars-span {
+    color: rgba(92, 184, 92, 1);
+}
+
+.types div {
+    border: 1px solid gray;
+    text-align: center;
+}
+
+.types div:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.types div:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+@media (min-width: 768px) {
+    .col-md-3 {
+        flex: 0 0 31%;
+        max-width: 46%;
+    }
 }
 
 .react-pagination-js-border-bottom {
@@ -55,3 +99,63 @@ form {
 .react-pagination-js-border-bottom li a:focus {
     outline: none;
 }
+
+
+/*Recipe View and Edit*/
+h5 {
+    color: rgba(92, 184, 92, 1);
+}
+
+.recipe-image {
+    width: 100%;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.icon-actions {
+    font-size: 30px;
+}
+
+.calories {
+    border: 1px solid rgba(92, 184, 92, 1);
+    border-radius: 6px;
+    text-align: center;
+    padding: 2%;
+    margin: 0;
+}
+
+p {
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 6px;
+    padding: 19px;
+}
+
+@media (max-width: 768px) {
+    .back {
+        margin-bottom: 3%;
+    }
+    textarea {
+        width: 95vw;
+    }
+}
+
+@media (min-width: 768px) {
+    .info {
+        padding: 10%;
+    }
+    .form-part-1 {
+        max-width: 450px;
+    }
+    /*.form-part-2 {*/
+    /*    width: 450px;*/
+    /*}*/
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+
+

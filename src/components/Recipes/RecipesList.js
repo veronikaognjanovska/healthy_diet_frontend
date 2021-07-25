@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactPaginate from 'react-paginate'
+import ReactPaginate from 'react-paginate';
 import RecipeComponent from "./RecipeComponent/RecipeComponent";
 import './Recipes.css';
 import {Link} from "react-router-dom";
@@ -10,7 +10,7 @@ class RecipesList extends React.Component {
         super(props);
         this.state = {
             page: 0,
-            size: 5
+            size: 9
         }
     }
 
@@ -22,48 +22,41 @@ class RecipesList extends React.Component {
 
         return (
             <div className={"row"}>
-                <div className={"button-right"}>
-                    <Link className={"btn btn-outline-success"} to={"/recipes/add"}>Add New Recipe</Link>
+                <div className={"col-12 text-center"}>
+                    <h1>Recipes</h1>
                 </div>
-                <div className={"col-sm-12 m-4"}>
-                    <h1>List of Recipes</h1>
+                <div className={"col-12 d-flex justify-content-between pl-0"}>
+                    <div className={"col-4 d-inline-block"}>
+                        <Link className={"col-12 btn btn-success"} to={"/recipes/search"}>Search</Link>
+                    </div>
+                    <div className={"col-4 d-inline-block"}>
+                        <Link className={"col-12 btn btn-success"} to={"/recipes/add"}>Add New Recipe</Link>
+                    </div>
                 </div>
-                <div className={"col-sm-12"}>
-                    <div className={"row"}>
-                        <div className={"table-responsive mt"}>
-                            <table className={"table table-striped"}>
-                                <thead>
-                                <tr>
-
-                                    <th scope={"col"}></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {recipeList}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="col mb-3">
-                            <div className="row">
-                                <div className="col-sm-12 col-sm-12">
-                                    <ReactPaginate previousLabel={"back"}
-                                                   nextLabel={"next"}
-                                                   breakLabel={<a href="/#">...</a>}
-                                                   breakClassName={"break-me"}
-                                                   pageClassName={"ml-1"}
-                                                   pageCount={pageCount}
-                                                   marginPagesDisplayed={2}
-                                                   pageRangeDisplayed={5}
-                                                   onPageChange={this.handlePageClick}
-                                                   containerClassName={"pagination react-pagination-js-border-bottom mb-3 justify-content-center"}
-                                                   activeClassName={"active"}/>
-                                </div>
+                <div className={"col-12"}>
+                    <div className={"row d-flex justify-content-start"}>
+                        {recipeList}
+                    </div>
+                    <div className="col mb-3">
+                        <div className="row">
+                            <div className="col-sm-12 col-sm-12">
+                                <ReactPaginate previousLabel={"back"}
+                                               nextLabel={"next"}
+                                               breakLabel={<a href="/#">...</a>}
+                                               breakClassName={"break-me"}
+                                               pageClassName={"ml-1"}
+                                               pageCount={pageCount}
+                                               marginPagesDisplayed={2}
+                                               pageRangeDisplayed={5}
+                                               onPageChange={this.handlePageClick}
+                                               containerClassName={"pagination react-pagination-js-border-bottom mb-3 justify-content-center"}
+                                               activeClassName={"active"}/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
 
@@ -71,13 +64,13 @@ class RecipesList extends React.Component {
         let selected = data.selected;
         this.setState({
             page: selected
-        })
+        });
     }
 
     getRecipesPage = (offset, nextPageOffset) => {
         return this.props.recipes.map((term, index) => {
             return (
-                <RecipeComponent key={index} term={term} onEdit={this.props.onEdit} onView={this.props.onView}/>
+                <RecipeComponent key={index} term={term} onViewDetails={this.props.onViewDetails}/>
             );
         }).filter((recipe, index) => {
             return index >= offset && index < nextPageOffset;

@@ -1,0 +1,13 @@
+.recipe {
+    padding: 15px;
+    border: 1px solid gray;
+    margin: 10px;
+    border-radius: 4px;
+}
+
+.recipe-image {
+    position: relative;
+    width: 60%;
+}
+
+

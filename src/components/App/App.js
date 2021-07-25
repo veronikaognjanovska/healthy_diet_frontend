@@ -7,6 +7,9 @@ import RecipeService from "../../service/RecipeService";
 import ReactNotification from 'react-notifications-component';
 import 'react-notifications-component/dist/theme.css';
 import RecipesList from "../Recipes/RecipesList";
+import RecipeView from "../Recipes/RecipeView/RecipeView";
+import Footer from "../Footer/Footer";
+import RecipeEdit from "../Recipes/RecipeEdit/RecipeEdit";
 
 class App extends Component {
 
@@ -25,14 +28,27 @@ class App extends Component {
                 <Header/>
                 <main>
                     <div className={"container pt-4"}>
+                        <Route path={"/recipes/view/:id"} exact render={() =>
+                            <RecipeView
+                                recipe={this.state.selectedRecipe}
+                                onEdit={this.getRecipe}
+                            />
+                        }/>
+                        <Route path={"/recipes/edit/:id"} exact render={() =>
+                            <RecipeEdit
+                                recipe={this.state.selectedRecipe}
+                                onEdit={this.editRecipe}
+                            />
+                        }/>
                         <Route path={"/recipes"} exact render={() =>
                             <RecipesList recipes={this.state.recipes}
-                                         onEdit={this.getRecipe}
+                                         onViewDetails={this.onViewDetailsGet}
                             />
                         }/>
                         <Redirect to={"/recipes"}/>
                     </div>
                 </main>
+                <Footer/>
             </Router>
         );
     };
@@ -46,17 +62,12 @@ class App extends Component {
             .then((data) => {
                 this.setState({
                     recipes: data.data
-                })
+                });
             });
     };
 
-    onViewGet = (id) => {
+    onViewDetailsGet = (id) => {
         this.getRecipe(id);
-    };
-
-    reloadSelected() {
-        this.loadRecipes();
-        this.getRecipe(this.state.selectedRecipe.id);
     };
 
     getRecipe = (id) => {
@@ -67,6 +78,16 @@ class App extends Component {
                 })
             })
     };
+
+    editRecipe = (id) => {
+        console.log("edit!")
+        RecipeService.editRecipe(id,)
+            .then(() => {
+                this.loadRecipes();
+                // NotificationService.success('Success!', 'Recipe edited successfully!')
+            });
+    }
+
 
 }
 
