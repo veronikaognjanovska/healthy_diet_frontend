@@ -3,6 +3,7 @@ import './Header.css';
 import logo from "../../assets/circle-cropped.png";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Nav, Navbar} from 'react-bootstrap';
+import {Link} from "react-router-dom";
 
 const Header = (props) => {
 
@@ -17,10 +18,11 @@ const Header = (props) => {
                         </Navbar.Brand>
                     </Nav>
                     <Nav className="mr-0">
-                        <Nav.Link href="/home" className="gold">HOME</Nav.Link>
-                        <Nav.Link href="/movies" className="gold">ADD NEW RECIPE</Nav.Link>
-                        <Nav.Link href="/movies" className="gold">PROFILE</Nav.Link>
-                        <Nav.Link href="/movies" className="gold">HEALTHY TODAY</Nav.Link>
+                        <Link className={"nav-link"} to={`/recipes`}>HOME</Link>
+                        <Link className={"nav-link"} to={`/edit/1`}>ADD NEW RECIPE</Link>
+                        <Link className={"nav-link"} to={`/profile`}>PROFILE</Link>
+                        <Link className={"nav-link"} to={`/healthy`}
+                              onClick={() => props.onHealthyToday()}>HEALTHY TODAY</Link>
                     </Nav>
                     {/*{*/}
                     {/*    undefined === undefined &&*/}

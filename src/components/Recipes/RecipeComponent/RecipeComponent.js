@@ -22,12 +22,12 @@ const RecipeComponent = (props) => {
                             <FontAwesomeIcon icon={faClock} className={"icon mr-2"}/>
                             <span className={"icon-span"}>{props.term.time} min</span>
                         </div>
-                        <div className={"col-3 pr-0"}>
+                        <div className={"col-4 pr-0"}>
                             <FontAwesomeIcon icon={faUser} className={"icon mr-2"}/>
                             <span className={"icon-span"}>{props.term.people} people</span>
                         </div>
-                        <div className={"col-6 d-flex justify-content-end"}>
-                            <span className={"stars-span my-auto mr-1"}>{props.term.rate}</span>
+                        <div className={"col-5 d-flex justify-content-start pl-0"}>
+                            <span className={"stars-span my-auto mr-1 mt-1"}>{props.term.rate}</span>
                             <ReactStars classNames={"stars"}
                                         count={5}
                                 // onChange={this.ratingChanged}

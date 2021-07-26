@@ -10,6 +10,7 @@ import RecipesList from "../Recipes/RecipesList";
 import RecipeView from "../Recipes/RecipeView/RecipeView";
 import Footer from "../Footer/Footer";
 import RecipeEdit from "../Recipes/RecipeEdit/RecipeEdit";
+import HealthyToday from "../HealthyToday/HealthyToday";
 
 class App extends Component {
 
@@ -17,7 +18,9 @@ class App extends Component {
         super(props);
         this.state = {
             recipes: [],
-            selectedRecipe: {}
+            selectedRecipe: {},
+            activeUser:"",
+            healthyData:undefined
         }
     };
 
@@ -25,7 +28,9 @@ class App extends Component {
         return (
             <Router>
                 <ReactNotification/>
-                <Header/>
+                <Header
+                    onHealthyToday={this.getHealthyToday}
+                />
                 <main>
                     <div className={"container pt-4"}>
                         <Route path={"/recipes/view/:id"} exact render={() =>
@@ -43,6 +48,15 @@ class App extends Component {
                         <Route path={"/recipes"} exact render={() =>
                             <RecipesList recipes={this.state.recipes}
                                          onViewDetails={this.onViewDetailsGet}
+                                         onSearch={this.onSearch}
+                            />
+                        }/>
+                        <Route path={"/healthy"} exact render={() =>
+                            <HealthyToday
+                                // recipes={this.state.recipes}
+                                //          onViewDetails={this.onViewDetailsGet}
+                                healthyData={this.state.healthyData}
+                                onViewDate={this.getHealthyToday}
                             />
                         }/>
                         <Redirect to={"/recipes"}/>
@@ -80,7 +94,6 @@ class App extends Component {
     };
 
     editRecipe = (id) => {
-        console.log("edit!")
         RecipeService.editRecipe(id,)
             .then(() => {
                 this.loadRecipes();
@@ -88,6 +101,25 @@ class App extends Component {
             });
     }
 
+    getHealthyToday = (date) => {
+        RecipeService.getHealthyToday(this.state.activeUser,date)
+            .then((data) => {
+                this.setState({
+                    healthyData: data.data
+                })
+                // NotificationService.success('Success!', 'Recipe edited successfully!')
+            });
+    };
+
+    onSearch = (searchInput, list) => {
+        RecipeService.onSearch(searchInput, list)
+            .then((data) => {
+                this.setState({
+                    recipes: data.data
+                })
+                // NotificationService.success('Success!', 'Recipe edited successfully!')
+            });
+    };
 
 }
 

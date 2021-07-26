@@ -4,6 +4,7 @@ import recipe from "../../../assets/Screenshot_6.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusCircle, faMinusCircle} from "@fortawesome/free-solid-svg-icons";
 import '../Recipes.css';
+import {faClock, faUser} from "@fortawesome/free-regular-svg-icons";
 
 class RecipeEdit extends React.Component {
 
@@ -13,8 +14,14 @@ class RecipeEdit extends React.Component {
         super(props);
         this.state = {
             ingredients: [],
-            fileData:null
+            fileData: null
         }
+    }
+
+    static removeIngredient = (index) => {
+        var ingredient = document.getElementById("ingredient" + index).innerText;
+        RecipeEdit.ingredients = RecipeEdit.ingredients.filter((a) => a !== ingredient);
+        // this.setState({});
     }
 
     onFormSubmit = (e) => {
@@ -64,15 +71,9 @@ class RecipeEdit extends React.Component {
 
     }
 
-    static removeIngredient = (index) => {
-        var ingredient = document.getElementById("ingredient" + index).innerText;
-        RecipeEdit.ingredients = RecipeEdit.ingredients.filter((a) => a !== ingredient);
-        // this.setState({});
-    }
-
     preview = (event) => {
         this.setState({
-            fileData:event.target.files[0]
+            fileData: event.target.files[0]
         });
     }
 
@@ -122,28 +123,55 @@ class RecipeEdit extends React.Component {
                             >Upload</Link>
                         </div>
                         <div className="form-group">
-                            <img className={"recipe-image"} src={recipe} alt="recipe image"/>
+                            {
+                                this.state.fileData !== null &&
+                                <img className={"recipe-image"} src={recipe} alt="recipe image"/>
+                            }
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="name">Time to prepare</label>
-                            <input type="text"
-                                   className="form-control"
-                                   id="time"
-                                   name="time"
-                                   placeholder={this.props.recipe?.title}
-                                // onChange={handleChange}
-                            />
+                            <div className="input-group">
+                                <div className={"input-group-prepend"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                        <FontAwesomeIcon icon={faClock} className={"text-white"}/>
+                                    </button>
+                                </div>
+                                <input type="text"
+                                       className="form-control"
+                                       id="time"
+                                       name="time"
+                                       placeholder={this.props.recipe?.title}
+                                    // onChange={handleChange}
+                                />
+                                <div className={"input-group-append"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                        min
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div className="form-group">
                             <label htmlFor="name">No. of people</label>
-                            <input type="text"
-                                   className="form-control"
-                                   id="people"
-                                   name="people"
-                                   placeholder={this.props.recipe?.title}
-                                // onChange={handleChange}
-                            />
+                            <div className="input-group">
+                                <div className={"input-group-prepend"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                        <FontAwesomeIcon icon={faUser} className={"text-white"}/>
+                                    </button>
+                                </div>
+                                <input type="text"
+                                       className="form-control"
+                                       id="people"
+                                       name="people"
+                                       placeholder={this.props.recipe?.title}
+                                    // onChange={handleChange}
+                                />
+                                <div className={"input-group-append"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                        people
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div className="form-group d-flex justify-content-center color-gray-lighter">
                             <div className={"w-25 d-inline"}>
@@ -216,8 +244,7 @@ class RecipeEdit extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="name">Calories</label>
+                        <div className="input-group">
                             <input type="text"
                                    className="form-control"
                                    id="calories"
@@ -225,6 +252,11 @@ class RecipeEdit extends React.Component {
                                    placeholder={this.props.recipe?.title}
                                 // onChange={handleChange}
                             />
+                            <div className={"input-group-append"}>
+                                <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                    Calories
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -242,8 +274,6 @@ class RecipeEdit extends React.Component {
                                                         onClick={function () {
                                                             RecipeEdit.removeIngredient(index)
                                                         }}
-                                                    // onClick={function(i){RecipeEdit.removeIngredient(index)}(index)}
-                                                    // onClick={this.sendCred1(index) }
                                                         id={"btn" + index}>
                                                     <FontAwesomeIcon icon={faMinusCircle}/>
                                                 </button>
@@ -256,9 +286,7 @@ class RecipeEdit extends React.Component {
                                 <input type="text" id="addIngredientInput" className="form-control"/>
                                 <div className={"input-group-append"}>
                                     <button type={"button"} id={"btn"} className={"input-group-text"}
-                                            onClick={this.addIngredient}
-                                        // onClick={function(){RecipeEdit.addIngredient()}}
-                                    >
+                                            onClick={this.addIngredient}>
                                         <FontAwesomeIcon icon={faPlusCircle} className={"text-success"}/>
                                     </button>
                                 </div>

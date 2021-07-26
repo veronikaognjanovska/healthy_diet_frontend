@@ -3,6 +3,7 @@ import ReactPaginate from 'react-paginate';
 import RecipeComponent from "./RecipeComponent/RecipeComponent";
 import './Recipes.css';
 import {Link} from "react-router-dom";
+import Search from "../Modals/Search";
 
 class RecipesList extends React.Component {
 
@@ -12,6 +13,19 @@ class RecipesList extends React.Component {
             page: 0,
             size: 9
         }
+    }
+
+    showModal = () => {
+        this.setState({show: true});
+    }
+
+    hideModal = () => {
+        this.setState({show: false, showEdit: false});
+    }
+
+    onInputSearch = (searchInput, list) => {
+        this.setState({show: false, showEdit: false});
+        this.props.onSearch(searchInput, list);
     }
 
     render() {
@@ -27,7 +41,11 @@ class RecipesList extends React.Component {
                 </div>
                 <div className={"col-12 d-flex justify-content-between pl-0"}>
                     <div className={"col-4 d-inline-block"}>
-                        <Link className={"col-12 btn btn-success"} to={"/recipes/search"}>Search</Link>
+                        <Link className={"col-12 btn btn-success"}
+                              onClick={this.showModal}>Search</Link>
+                        <Search show={this.state.show} handleClose={this.hideModal}
+                                onInputSearch={this.onInputSearch}>
+                        </Search>
                     </div>
                     <div className={"col-4 d-inline-block"}>
                         <Link className={"col-12 btn btn-success"} to={"/recipes/add"}>Add New Recipe</Link>
