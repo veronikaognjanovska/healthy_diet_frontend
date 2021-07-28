@@ -19,8 +19,8 @@ class App extends Component {
         this.state = {
             recipes: [],
             selectedRecipe: {},
-            activeUser:"",
-            healthyData:undefined
+            activeUser: "",
+            healthyData: undefined
         }
     };
 
@@ -43,6 +43,7 @@ class App extends Component {
                             <RecipeEdit
                                 recipe={this.state.selectedRecipe}
                                 onEdit={this.editRecipe}
+                                onSubmit={this.getRecipe}
                             />
                         }/>
                         <Route path={"/recipes"} exact render={() =>
@@ -85,6 +86,7 @@ class App extends Component {
     };
 
     getRecipe = (id) => {
+        console.log(id)
         RecipeService.getRecipe(id)
             .then((data) => {
                 this.setState({
@@ -102,7 +104,7 @@ class App extends Component {
     }
 
     getHealthyToday = (date) => {
-        RecipeService.getHealthyToday(this.state.activeUser,date)
+        RecipeService.getHealthyToday(this.state.activeUser, date)
             .then((data) => {
                 this.setState({
                     healthyData: data.data

@@ -1,10 +1,11 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import recipe from "../../../assets/Screenshot_6.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlusCircle, faMinusCircle} from "@fortawesome/free-solid-svg-icons";
 import '../Recipes.css';
 import {faClock, faUser} from "@fortawesome/free-regular-svg-icons";
+import RecipeService from "../../../service/RecipeService";
 
 class RecipeEdit extends React.Component {
 
@@ -12,9 +13,16 @@ class RecipeEdit extends React.Component {
 
     constructor(props) {
         super(props);
+        RecipeEdit.ingredients = this.props.recipe?.ingredients ? this.props.recipe.ingredients : [];
         this.state = {
             ingredients: [],
-            fileData: null
+            fileData: null,
+            fileImage: null,
+            title: this.props.recipe?.title ? this.props.recipe?.title : '',
+            time: this.props.recipe?.time ? this.props.recipe?.time : '',
+            people: this.props.recipe?.people ? this.props.recipe?.people : '',
+            types: this.props.recipe?.types ? this.props.recipe?.types : [],
+            calories: this.props.recipe?.calories ? this.props.recipe?.calories : '',
         }
     }
 
@@ -24,15 +32,20 @@ class RecipeEdit extends React.Component {
         // this.setState({});
     }
 
+    onChange = (e) => {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
     onFormSubmit = (e) => {
         e.preventDefault();
 
         var title = document.getElementById("title").value;
         var time = document.getElementById("time").value;
         var people = document.getElementById("people").value;
-        var list = this.getCheckBoxListValues();
+        var types = this.getCheckBoxListValues();
         var calories = document.getElementById("calories").value;
         var preparation = document.getElementById("preparation").value;
+        var ingredients = RecipeEdit.ingredients;
 
         // const name = formData.name !== "" ? formData.name : props.book.name;
         // const category = formData.category !== -1 ? formData.category : props.book.category;
@@ -41,14 +54,31 @@ class RecipeEdit extends React.Component {
         //
         // props.onEditBook(props.book.id, name, category, author, availableCopies);
         // history.push("/books");
-        console.log(title);
-        console.log(time);
-        console.log(people);
-        console.log(list);
-        console.log(calories);
-        console.log(RecipeEdit.ingredients);
-        console.log(preparation);
-
+        // console.log(title);
+        // console.log(time);
+        // console.log(people);
+        // console.log(types);
+        // console.log(calories);
+        // console.log(RecipeEdit.ingredients);
+        // console.log(preparation);
+        // console.log("submit")
+        const data = {
+            title, time, people, types, calories, preparation, ingredients
+        };
+        console.log(data)
+        if (this.props.recipe.id) {
+            RecipeService.editRecipe(this.props.recipe.id, data)
+                .then((data) => {
+                    this.props.onSubmit(data.data.id);
+                    this.props.history.push(`/recipes/view/${data.data.id}`);
+                })
+        } else {
+            RecipeService.addRecipe(data)
+                .then((data) => {
+                    this.props.onSubmit(data.data.id);
+                    this.props.history.push(`/recipes/view/${data.data.id}`);
+                })
+        }
     }
 
     getCheckBoxListValues = () => {
@@ -73,13 +103,13 @@ class RecipeEdit extends React.Component {
 
     preview = (event) => {
         this.setState({
-            fileData: event.target.files[0]
+            fileData: event.target.files[0],
+            fileImage: URL.createObjectURL(event.target.files[0])
         });
     }
 
     upload = () => {
-        console.log("----------------------")
-        console.log(this.state.fileData)
+        console.log("upload")
     }
 
 
@@ -90,7 +120,7 @@ class RecipeEdit extends React.Component {
                     <h4>Recipe</h4>
                 </div>
                 <div className={"col-12 back"}>
-                    <Link className={"btn btn-success float-left py-1 px-2"}
+                    <Link className={"btn btn-success btn-green float-left py-1 px-2"}
                           to={`/recipes/view/${this.props.recipe.id}`}>Back</Link>
                 </div>
                 <form onSubmit={this.onFormSubmit} className={"w-100"}>
@@ -102,8 +132,8 @@ class RecipeEdit extends React.Component {
                                    className="form-control"
                                    id="title"
                                    name="title"
-                                   placeholder={this.props.recipe?.title}
-                                // onChange={handleChange}
+                                   value={this.state.title}
+                                   onChange={this.onChange}
                             />
                         </div>
                         <div className="form-group">
@@ -113,19 +143,18 @@ class RecipeEdit extends React.Component {
                                    className="form-control"
                                    id="image"
                                    name="image"
-                                   placeholder={this.props.recipe?.title}
                                    onChange={this.preview}
                             />
                         </div>
                         <div className="form-group">
-                            <Link className={"btn btn-success float-left py-1 px-2 w-100 mb-2"}
+                            <Link className={"btn btn-success btn-green float-left py-1 px-2 w-100 mb-2"}
                                   onClick={this.upload}
                             >Upload</Link>
                         </div>
                         <div className="form-group">
                             {
                                 this.state.fileData !== null &&
-                                <img className={"recipe-image"} src={recipe} alt="recipe image"/>
+                                <img className={"recipe-image"} src={this.state.fileImage} alt="recipe image"/>
                             }
                         </div>
 
@@ -141,8 +170,8 @@ class RecipeEdit extends React.Component {
                                        className="form-control"
                                        id="time"
                                        name="time"
-                                       placeholder={this.props.recipe?.title}
-                                    // onChange={handleChange}
+                                       value={this.state.time}
+                                       onChange={this.onChange}
                                 />
                                 <div className={"input-group-append"}>
                                     <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
@@ -163,8 +192,8 @@ class RecipeEdit extends React.Component {
                                        className="form-control"
                                        id="people"
                                        name="people"
-                                       placeholder={this.props.recipe?.title}
-                                    // onChange={handleChange}
+                                       value={this.state.people}
+                                       onChange={this.onChange}
                                 />
                                 <div className={"input-group-append"}>
                                     <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
@@ -176,70 +205,86 @@ class RecipeEdit extends React.Component {
                         <div className="form-group d-flex justify-content-center color-gray-lighter">
                             <div className={"w-25 d-inline"}>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Breakfast"/>
+                                    <input type="checkbox" id="type" name="type" value="Breakfast"
+                                           defaultChecked={this.state.types.includes("Breakfast")}/>
                                     <label htmlFor="type">Breakfast</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Lunch"/>
+                                    <input type="checkbox" id="type" name="type" value="Lunch"
+                                           defaultChecked={this.state.types.includes("Lunch")}/>
                                     <label htmlFor="type">Lunch</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Diner"/>
+                                    <input type="checkbox" id="type" name="type" value="Diner"
+                                           defaultChecked={this.state.types.includes("Diner")}/>
                                     <label htmlFor="type">Diner</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Snack"/>
+                                    <input type="checkbox" id="type" name="type" value="Snack"
+                                           defaultChecked={this.state.types.includes("Snack")}/>
                                     <label htmlFor="type">Snack</label>
                                 </div>
                                 <br/>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Easy"/>
+                                    <input type="checkbox" id="type" name="type" value="Easy"
+                                           defaultChecked={this.state.types.includes("Easy")}/>
                                     <label htmlFor="type">Easy</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Medium"/>
+                                    <input type="checkbox" id="type" name="type" value="Medium"
+                                           defaultChecked={this.state.types.includes("Medium")}/>
                                     <label htmlFor="type">Medium</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Hard"/>
+                                    <input type="checkbox" id="type" name="type" value="Hard"
+                                           defaultChecked={this.state.types.includes("Hard")}/>
                                     <label htmlFor="type">Hard</label>
                                 </div>
                             </div>
                             <div className={"w-25 d-inline"}>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Traditional"/>
+                                    <input type="checkbox" id="type" name="type" value="Traditional"
+                                           defaultChecked={this.state.types.includes("Traditional")}/>
                                     <label htmlFor="type">Traditional</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Vegetarian"/>
+                                    <input type="checkbox" id="type" name="type" value="Vegetarian"
+                                           defaultChecked={this.state.types.includes("Vegetarian")}/>
                                     <label htmlFor="type">Vegetarian</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Vegan"/>
+                                    <input type="checkbox" id="type" name="type" value="Vegan"
+                                           defaultChecked={this.state.types.includes("Vegan")}/>
                                     <label htmlFor="type">Vegan</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Mediterian"/>
+                                    <input type="checkbox" id="type" name="type" value="Mediterian"
+                                           defaultChecked={this.state.types.includes("Mediterian")}/>
                                     <label htmlFor="type">Mediterian</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Paleo"/>
+                                    <input type="checkbox" id="type" name="type" value="Paleo"
+                                           defaultChecked={this.state.types.includes("Paleo")}/>
                                     <label htmlFor="type">Paleo</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Pescaterian"/>
+                                    <input type="checkbox" id="type" name="type" value="Pescaterian"
+                                           defaultChecked={this.state.types.includes("Pescaterian")}/>
                                     <label htmlFor="type">Pescaterian</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Keto"/>
+                                    <input type="checkbox" id="type" name="type" value="Keto"
+                                           defaultChecked={this.state.types.includes("Keto")}/>
                                     <label htmlFor="type">Keto</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Lactose free"/>
+                                    <input type="checkbox" id="type" name="type" value="Lactose free"
+                                           defaultChecked={this.state.types.includes("Lactose free")}/>
                                     <label htmlFor="type">Lactose free</label>
                                 </div>
                                 <div className={"d-block"}>
-                                    <input type="checkbox" id="type" name="type" value="Gluten free"/>
+                                    <input type="checkbox" id="type" name="type" value="Gluten free"
+                                           defaultChecked={this.state.types.includes("Gluten free")}/>
                                     <label htmlFor="type">Gluten free</label>
                                 </div>
                             </div>
@@ -249,8 +294,8 @@ class RecipeEdit extends React.Component {
                                    className="form-control"
                                    id="calories"
                                    name="calories"
-                                   placeholder={this.props.recipe?.title}
-                                // onChange={handleChange}
+                                   value={this.state.calories}
+                                   onChange={this.onChange}
                             />
                             <div className={"input-group-append"}>
                                 <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
@@ -294,12 +339,15 @@ class RecipeEdit extends React.Component {
                         </div>
                         <div className={"col-sm-12 col-md-6 mt-4"}>
                             <h5>Preparation</h5>
-                            <textarea id={"preparation"} className={"w-100"} rows="10"></textarea>
+                            <textarea id={"preparation"} className={"w-100"} rows="10"
+                                      defaultValue={this.props.recipe?.preparation}>
+
+                            </textarea>
                         </div>
                     </div>
                     <div className="form-group">
                         <button id="submit" type="submit"
-                                className={"btn btn-success float-left py-1 px-2 w-100 my-2"}>Submit
+                                className={"btn btn-success btn-green float-left py-1 px-2 w-100 my-2"}>Submit
                         </button>
                     </div>
                 </form>
@@ -310,4 +358,4 @@ class RecipeEdit extends React.Component {
 
 }
 
-export default RecipeEdit;
+export default withRouter(RecipeEdit);

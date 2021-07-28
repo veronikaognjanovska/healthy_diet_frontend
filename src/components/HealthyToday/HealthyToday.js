@@ -74,21 +74,21 @@ class HealthyToday extends React.Component {
                 </div>
 
                 <div className="col-12 p-0 mt-2">
-                    <Link className={"btn btn-success float-left py-2 px-2 w-100 mb-2"}
+                    <Link className={"btn btn-success btn-green float-left py-2 px-2 w-100 mb-2"}
                           onClick={this.viewPast.bind(this)}
                     >View Past</Link>
                 </div>
                 {
                     this.state.showToday===-1 &&
-                    <div className="col-12 p-0 mt-2">
-                        <Link className={"btn btn-success float-left py-2 px-2 w-100 mb-2"}
+                    <div className="col-3 p-0 mt-2">
+                        <Link className={"btn btn-success btn-green float-left py-2 px-2 w-100 mb-2"}
                               to={`/recipes`}>Back</Link>
                     </div>
                 }
                 {
                     this.state.showToday!==-1 &&
                     <div className="col-12 p-0 mt-2">
-                        <Link className={"btn btn-success float-left py-2 px-2 w-100 mb-2"}
+                        <Link className={"btn btn-success btn-green float-left py-2 px-2 w-100 mb-2"}
                               onClick={this.viewPast.bind(this,-1)}
                         >Healthy Today</Link>
                     </div>

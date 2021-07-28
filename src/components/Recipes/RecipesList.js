@@ -20,11 +20,11 @@ class RecipesList extends React.Component {
     }
 
     hideModal = () => {
-        this.setState({show: false, showEdit: false});
+        this.setState({show: false});
     }
 
     onInputSearch = (searchInput, list) => {
-        this.setState({show: false, showEdit: false});
+        this.setState({show: false});
         this.props.onSearch(searchInput, list);
     }
 
@@ -41,14 +41,14 @@ class RecipesList extends React.Component {
                 </div>
                 <div className={"col-12 d-flex justify-content-between pl-0"}>
                     <div className={"col-4 d-inline-block"}>
-                        <Link className={"col-12 btn btn-success"}
+                        <Link className={"col-12 btn btn-success btn-green"}
                               onClick={this.showModal}>Search</Link>
                         <Search show={this.state.show} handleClose={this.hideModal}
                                 onInputSearch={this.onInputSearch}>
                         </Search>
                     </div>
                     <div className={"col-4 d-inline-block"}>
-                        <Link className={"col-12 btn btn-success"} to={"/recipes/add"}>Add New Recipe</Link>
+                        <Link className={"col-12 btn btn-success btn-green"} to={"/recipes/add"}>Add New Recipe</Link>
                     </div>
                 </div>
                 <div className={"col-12"}>

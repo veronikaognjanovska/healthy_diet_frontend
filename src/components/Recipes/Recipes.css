@@ -18,6 +18,9 @@ h1, h4, h6, span {
 .btn-success {
     background-color: rgba(92, 184, 92, 1) !important;
     border-color: rgba(92, 184, 92, 1) !important;
+}
+
+.btn-green{
     padding: 2% 0;
     font-size: 11px;
 }
@@ -29,6 +32,10 @@ h1, h4, h6, span {
 
 .icon-span {
     font-size: 15px;
+}
+
+.healthyIcon {
+    background: radial-gradient(rgba(92, 184, 92, 0.5), transparent);
 }
 
 .stars {
