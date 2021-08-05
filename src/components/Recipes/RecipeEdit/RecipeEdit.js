@@ -1,8 +1,7 @@
 import React from 'react';
 import {Link, withRouter} from "react-router-dom";
-import recipe from "../../../assets/Screenshot_6.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlusCircle, faMinusCircle} from "@fortawesome/free-solid-svg-icons";
+import {faMinusCircle, faPlusCircle} from "@fortawesome/free-solid-svg-icons";
 import '../Recipes.css';
 import {faClock, faUser} from "@fortawesome/free-regular-svg-icons";
 import RecipeService from "../../../service/RecipeService";
@@ -13,15 +12,16 @@ class RecipeEdit extends React.Component {
 
     constructor(props) {
         super(props);
-        RecipeEdit.ingredients = this.props.recipe?.ingredients ? this.props.recipe.ingredients : [];
+        console.log("-----------------")
+        RecipeEdit.ingredients = this.props.recipe?.ingredients1 ? this.props.recipe.ingredients1 : [];
         this.state = {
             ingredients: [],
             fileData: null,
             fileImage: null,
             title: this.props.recipe?.title ? this.props.recipe?.title : '',
-            time: this.props.recipe?.time ? this.props.recipe?.time : '',
+            timeToPrepare: this.props.recipe?.timeToPrepare ? this.props.recipe?.timeToPrepare : '',
             people: this.props.recipe?.people ? this.props.recipe?.people : '',
-            types: this.props.recipe?.types ? this.props.recipe?.types : [],
+            types1: this.props.recipe?.types1 ? this.props.recipe?.types1 : [],
             calories: this.props.recipe?.calories ? this.props.recipe?.calories : '',
         }
     }
@@ -40,40 +40,21 @@ class RecipeEdit extends React.Component {
         e.preventDefault();
 
         var title = document.getElementById("title").value;
-        var time = document.getElementById("time").value;
+        var timeToPrepare = document.getElementById("timeToPrepare").value;
         var people = document.getElementById("people").value;
-        var types = this.getCheckBoxListValues();
+        var types1 = this.getCheckBoxListValues();
         var calories = document.getElementById("calories").value;
         var preparation = document.getElementById("preparation").value;
         var ingredients = RecipeEdit.ingredients;
 
-        // const name = formData.name !== "" ? formData.name : props.book.name;
-        // const category = formData.category !== -1 ? formData.category : props.book.category;
-        // const author = formData.author !== -1 ? formData.author.id : props.book.author.id;
-        // const availableCopies = props.book.availableCopies;
-        //
-        // props.onEditBook(props.book.id, name, category, author, availableCopies);
-        // history.push("/books");
-        // console.log(title);
-        // console.log(time);
-        // console.log(people);
-        // console.log(types);
-        // console.log(calories);
-        // console.log(RecipeEdit.ingredients);
-        // console.log(preparation);
-        // console.log("submit")
-        const data = {
-            title, time, people, types, calories, preparation, ingredients
-        };
-        console.log(data)
-        if (this.props.recipe.id) {
-            RecipeService.editRecipe(this.props.recipe.id, data)
+        if (this.props.recipe?.id) {
+            RecipeService.editRecipe(this.props.recipe.id, title, timeToPrepare, people, types1, calories, preparation, ingredients)
                 .then((data) => {
                     this.props.onSubmit(data.data.id);
                     this.props.history.push(`/recipes/view/${data.data.id}`);
                 })
         } else {
-            RecipeService.addRecipe(data)
+            RecipeService.addRecipe(title, timeToPrepare, people, types1, calories, preparation, ingredients)
                 .then((data) => {
                     this.props.onSubmit(data.data.id);
                     this.props.history.push(`/recipes/view/${data.data.id}`);
@@ -120,8 +101,17 @@ class RecipeEdit extends React.Component {
                     <h4>Recipe</h4>
                 </div>
                 <div className={"col-12 back"}>
-                    <Link className={"btn btn-success btn-green float-left py-1 px-2"}
-                          to={`/recipes/view/${this.props.recipe.id}`}>Back</Link>
+                    {
+                        this.props.recipe?.id &&
+                        <Link className={"btn btn-success btn-green float-left py-1 px-2"}
+                              to={`/recipes/view/${this.props.recipe.id}`}
+                                onClick={this.props.onBack}>Back</Link>
+                    }
+                    {
+                        this.props.recipe === undefined &&
+                        <Link className={"btn btn-success btn-green float-left py-1 px-2"}
+                              to={`/recipes`}>Back</Link>
+                    }
                 </div>
                 <form onSubmit={this.onFormSubmit} className={"w-100"}>
                     {/*part1*/}
@@ -162,19 +152,19 @@ class RecipeEdit extends React.Component {
                             <label htmlFor="name">Time to prepare</label>
                             <div className="input-group">
                                 <div className={"input-group-prepend"}>
-                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={true}>
                                         <FontAwesomeIcon icon={faClock} className={"text-white"}/>
                                     </button>
                                 </div>
                                 <input type="text"
                                        className="form-control"
-                                       id="time"
-                                       name="time"
-                                       value={this.state.time}
+                                       id="timeToPrepare"
+                                       name="timeToPrepare"
+                                       value={this.state.timeToPrepare}
                                        onChange={this.onChange}
                                 />
                                 <div className={"input-group-append"}>
-                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={true}>
                                         min
                                     </button>
                                 </div>
@@ -184,7 +174,7 @@ class RecipeEdit extends React.Component {
                             <label htmlFor="name">No. of people</label>
                             <div className="input-group">
                                 <div className={"input-group-prepend"}>
-                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={true}>
                                         <FontAwesomeIcon icon={faUser} className={"text-white"}/>
                                     </button>
                                 </div>
@@ -196,7 +186,7 @@ class RecipeEdit extends React.Component {
                                        onChange={this.onChange}
                                 />
                                 <div className={"input-group-append"}>
-                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                    <button type={"button"} id={"btn"} className={"input-group-text"} disabled={true}>
                                         people
                                     </button>
                                 </div>
@@ -206,85 +196,85 @@ class RecipeEdit extends React.Component {
                             <div className={"w-25 d-inline"}>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Breakfast"
-                                           defaultChecked={this.state.types.includes("Breakfast")}/>
+                                           defaultChecked={this.state.types1.includes("Breakfast")}/>
                                     <label htmlFor="type">Breakfast</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Lunch"
-                                           defaultChecked={this.state.types.includes("Lunch")}/>
+                                           defaultChecked={this.state.types1.includes("Lunch")}/>
                                     <label htmlFor="type">Lunch</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Diner"
-                                           defaultChecked={this.state.types.includes("Diner")}/>
+                                           defaultChecked={this.state.types1.includes("Diner")}/>
                                     <label htmlFor="type">Diner</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Snack"
-                                           defaultChecked={this.state.types.includes("Snack")}/>
+                                           defaultChecked={this.state.types1.includes("Snack")}/>
                                     <label htmlFor="type">Snack</label>
                                 </div>
                                 <br/>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Easy"
-                                           defaultChecked={this.state.types.includes("Easy")}/>
+                                           defaultChecked={this.state.types1.includes("Easy")}/>
                                     <label htmlFor="type">Easy</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Medium"
-                                           defaultChecked={this.state.types.includes("Medium")}/>
+                                           defaultChecked={this.state.types1.includes("Medium")}/>
                                     <label htmlFor="type">Medium</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Hard"
-                                           defaultChecked={this.state.types.includes("Hard")}/>
+                                           defaultChecked={this.state.types1.includes("Hard")}/>
                                     <label htmlFor="type">Hard</label>
                                 </div>
                             </div>
                             <div className={"w-25 d-inline"}>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Traditional"
-                                           defaultChecked={this.state.types.includes("Traditional")}/>
+                                           defaultChecked={this.state.types1.includes("Traditional")}/>
                                     <label htmlFor="type">Traditional</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Vegetarian"
-                                           defaultChecked={this.state.types.includes("Vegetarian")}/>
+                                           defaultChecked={this.state.types1.includes("Vegetarian")}/>
                                     <label htmlFor="type">Vegetarian</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Vegan"
-                                           defaultChecked={this.state.types.includes("Vegan")}/>
+                                           defaultChecked={this.state.types1.includes("Vegan")}/>
                                     <label htmlFor="type">Vegan</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Mediterian"
-                                           defaultChecked={this.state.types.includes("Mediterian")}/>
+                                           defaultChecked={this.state.types1.includes("Mediterian")}/>
                                     <label htmlFor="type">Mediterian</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Paleo"
-                                           defaultChecked={this.state.types.includes("Paleo")}/>
+                                           defaultChecked={this.state.types1.includes("Paleo")}/>
                                     <label htmlFor="type">Paleo</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Pescaterian"
-                                           defaultChecked={this.state.types.includes("Pescaterian")}/>
+                                           defaultChecked={this.state.types1.includes("Pescaterian")}/>
                                     <label htmlFor="type">Pescaterian</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Keto"
-                                           defaultChecked={this.state.types.includes("Keto")}/>
+                                           defaultChecked={this.state.types1.includes("Keto")}/>
                                     <label htmlFor="type">Keto</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Lactose free"
-                                           defaultChecked={this.state.types.includes("Lactose free")}/>
+                                           defaultChecked={this.state.types1.includes("Lactose free")}/>
                                     <label htmlFor="type">Lactose free</label>
                                 </div>
                                 <div className={"d-block"}>
                                     <input type="checkbox" id="type" name="type" value="Gluten free"
-                                           defaultChecked={this.state.types.includes("Gluten free")}/>
+                                           defaultChecked={this.state.types1.includes("Gluten free")}/>
                                     <label htmlFor="type">Gluten free</label>
                                 </div>
                             </div>
@@ -298,7 +288,7 @@ class RecipeEdit extends React.Component {
                                    onChange={this.onChange}
                             />
                             <div className={"input-group-append"}>
-                                <button type={"button"} id={"btn"} className={"input-group-text"} disabled={"true"}>
+                                <button type={"button"} id={"btn"} className={"input-group-text"} disabled={true}>
                                     Calories
                                 </button>
                             </div>
@@ -311,9 +301,9 @@ class RecipeEdit extends React.Component {
                             <h5>Ingredients</h5>
                             <ul className="list-group mb-3">
                                 {
-                                    RecipeEdit.ingredients?.map((item, index) => {
+                                    RecipeEdit.ingredients1?.map((item, index) => {
                                         return (
-                                            <li className={"list-group-item p-2"}>
+                                            <li className={"list-group-item p-2"} key={index}>
                                                 <div className={"d-inline-block"} id={"ingredient" + index}>{item}</div>
                                                 <button type={"button"} className={"btn float-right text-danger p-0"}
                                                         onClick={function () {
@@ -347,7 +337,7 @@ class RecipeEdit extends React.Component {
                     </div>
                     <div className="form-group">
                         <button id="submit" type="submit"
-                                className={"btn btn-success btn-green float-left py-1 px-2 w-100 my-2"}>Submit
+                                className={"btn btn-success btn-green float-left py-1 px-2 w-100 my-2"}>Save
                         </button>
                     </div>
                 </form>

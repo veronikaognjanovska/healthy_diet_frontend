@@ -11,6 +11,10 @@ import RecipeView from "../Recipes/RecipeView/RecipeView";
 import Footer from "../Footer/Footer";
 import RecipeEdit from "../Recipes/RecipeEdit/RecipeEdit";
 import HealthyToday from "../HealthyToday/HealthyToday";
+import Login from "../Login/Login";
+import Register from "../Login/Register";
+import Logout from "../Login/Logout";
+import Profile from "../Profile/Profile";
 
 class App extends Component {
 
@@ -30,6 +34,7 @@ class App extends Component {
                 <ReactNotification/>
                 <Header
                     onHealthyToday={this.getHealthyToday}
+                    onHome={this.loadRecipes}
                 />
                 <main>
                     <div className={"container pt-4"}>
@@ -46,6 +51,12 @@ class App extends Component {
                                 onSubmit={this.getRecipe}
                             />
                         }/>
+                        <Route path={"/recipes/add"} exact render={() =>
+                            <RecipeEdit
+                                onSubmit={this.getRecipe}
+                                onBack={this.onBack}
+                            />
+                        }/>
                         <Route path={"/recipes"} exact render={() =>
                             <RecipesList recipes={this.state.recipes}
                                          onViewDetails={this.onViewDetailsGet}
@@ -60,6 +71,18 @@ class App extends Component {
                                 onViewDate={this.getHealthyToday}
                             />
                         }/>
+                        <Route path={"/login"} exact render={() =>
+                            <Login/>
+                        }/>
+                        <Route path={"/register"} exact render={() =>
+                            <Register/>
+                        }/>
+                        <Route path={"/logout"} exact render={() =>
+                            <Logout/>
+                        }/>
+                        <Route path={"/profile"} exact render={() =>
+                            <Profile/>
+                        }/>
                         <Redirect to={"/recipes"}/>
                     </div>
                 </main>
@@ -68,7 +91,7 @@ class App extends Component {
         );
     };
 
-    componentDidMount() {
+    componentWillMount() {
         this.loadRecipes();
     };
 
@@ -86,7 +109,6 @@ class App extends Component {
     };
 
     getRecipe = (id) => {
-        console.log(id)
         RecipeService.getRecipe(id)
             .then((data) => {
                 this.setState({
@@ -94,14 +116,6 @@ class App extends Component {
                 })
             })
     };
-
-    editRecipe = (id) => {
-        RecipeService.editRecipe(id,)
-            .then(() => {
-                this.loadRecipes();
-                // NotificationService.success('Success!', 'Recipe edited successfully!')
-            });
-    }
 
     getHealthyToday = (date) => {
         RecipeService.getHealthyToday(this.state.activeUser, date)
@@ -121,6 +135,10 @@ class App extends Component {
                 })
                 // NotificationService.success('Success!', 'Recipe edited successfully!')
             });
+    };
+
+    onBack = () => {
+        this.loadRecipes();
     };
 
 }

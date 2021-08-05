@@ -4,8 +4,11 @@ import logo from "../../assets/circle-cropped.png";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Nav, Navbar} from 'react-bootstrap';
 import {Link} from "react-router-dom";
+import UserService from "../../service/UserService";
 
 const Header = (props) => {
+
+    let username = UserService.getLoggedInUser();
 
     return (
         <header className={"bg-my"}>
@@ -18,25 +21,34 @@ const Header = (props) => {
                         </Navbar.Brand>
                     </Nav>
                     <Nav className="mr-0">
-                        <Link className={"nav-link"} to={`/recipes`}>HOME</Link>
-                        <Link className={"nav-link"} to={`/edit/1`}>ADD NEW RECIPE</Link>
-                        <Link className={"nav-link"} to={`/profile`}>PROFILE</Link>
-                        <Link className={"nav-link"} to={`/healthy`}
-                              onClick={() => props.onHealthyToday()}>HEALTHY TODAY</Link>
+                        <Link className={"nav-link"} to={`/recipes`}
+                              onClick={() => props.onHome()}>HOME</Link>
+                        {
+                            username !== undefined &&
+                            <Link className={"nav-link"} to={`/recipes/add`}>ADD NEW RECIPE</Link>
+                        }
+                        {
+                            username !== undefined &&
+                            <Link className={"nav-link"} to={`/profile`}>PROFILE</Link>
+                        }
+                        {
+                            username !== undefined &&
+                            <Link className={"nav-link"} to={`/healthy`}
+                                  onClick={() => props.onHealthyToday()}>HEALTHY TODAY</Link>
+                        }
+                        {
+                            username === undefined &&
+                            <Link className={"nav-link"} to={`/login`}>LOG IN</Link>
+                        }
+                        {
+                            username === undefined &&
+                            <Link className={"nav-link"} to={`/register`}>REGISTER</Link>
+                        }
+                        {
+                            username !== undefined &&
+                            <Link className={"nav-link"} to={`/logout`}>LOGOUT</Link>
+                        }
                     </Nav>
-                    {/*{*/}
-                    {/*    undefined === undefined &&*/}
-                    {/*    <Nav className="mr-0">*/}
-                    {/*        <Nav.Link href="/movies" className="gold">LOG IN</Nav.Link>*/}
-                    {/*        <Nav.Link href="/movies" className="gold">REGISTER</Nav.Link>*/}
-                    {/*    </Nav>*/}
-                    {/*}*/}
-                    {/*{*/}
-                    {/*    undefined === undefined &&*/}
-                    {/*    <Nav className="mr-0">*/}
-                    {/*        <Nav.Link href="/movies" className="gold">LOGOUT</Nav.Link>*/}
-                    {/*    </Nav>*/}
-                    {/*}*/}
                 </Navbar.Collapse>
             </Navbar>
         </header>

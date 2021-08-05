@@ -4,6 +4,8 @@ import RecipeComponent from "./RecipeComponent/RecipeComponent";
 import './Recipes.css';
 import {Link} from "react-router-dom";
 import Search from "../Modals/Search";
+import {Button} from "react-bootstrap";
+import RecipeService from "../../service/RecipeService";
 
 class RecipesList extends React.Component {
 
@@ -41,8 +43,8 @@ class RecipesList extends React.Component {
                 </div>
                 <div className={"col-12 d-flex justify-content-between pl-0"}>
                     <div className={"col-4 d-inline-block"}>
-                        <Link className={"col-12 btn btn-success btn-green"}
-                              onClick={this.showModal}>Search</Link>
+                        <Button className={"col-12 btn btn-success btn-green"}
+                              onClick={this.showModal}>Search</Button>
                         <Search show={this.state.show} handleClose={this.hideModal}
                                 onInputSearch={this.onInputSearch}>
                         </Search>

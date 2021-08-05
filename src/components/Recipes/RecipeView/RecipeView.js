@@ -2,11 +2,13 @@ import React from 'react';
 import {Link, withRouter} from "react-router-dom";
 import recipe from "../../../assets/Screenshot_6.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUtensils, faTimesCircle, faBookmark} from "@fortawesome/free-solid-svg-icons";
-import {faClock, faUser, faBookmark as faBookmarkRegular, faEdit} from "@fortawesome/free-regular-svg-icons";
+import {faBookmark, faTimesCircle, faUtensils} from "@fortawesome/free-solid-svg-icons";
+import {faBookmark as faBookmarkRegular, faClock, faEdit, faUser} from "@fortawesome/free-regular-svg-icons";
 import ReactStars from "react-rating-stars-component";
 import '../Recipes.css';
 import Question from "../../Modals/Question";
+import UserService from "../../../service/UserService";
+import RecipeService from "../../../service/RecipeService";
 
 class RecipeView extends React.Component {
 
@@ -18,15 +20,20 @@ class RecipeView extends React.Component {
             color: '',
             action: '',
             saveIcon: faBookmarkRegular,
-            healthyIcon: 'icon icon-actions mr-2'
+            healthyIcon: 'icon icon-actions mr-2',
+            username: UserService.getLoggedInUser()
         }
     }
 
     showModal = (question, color, action) => {
         if (action === 'healthyToday' && this.state.healthyIcon === 'icon icon-actions mr-2 healthyIcon') {
-            return this.setState({
-                healthyIcon: 'icon icon-actions mr-2'
-            });
+            RecipeService.removeFromHealthyToday(this.props.recipe.id)
+                .then((data) => {
+                    this.setState({
+                        healthyIcon: 'icon icon-actions mr-2'
+                    });
+                })
+            return;
         }
         this.setState({
             show: true,
@@ -39,24 +46,33 @@ class RecipeView extends React.Component {
     hideModal = (answer) => {
         this.setState({show: false});
         if (answer === 'delete') {
-            console.log('delete')
-            this.props.history.push(`/recipes`);
+            RecipeService.delete(this.props.recipe.id)
+                .then((data) => {
+                    this.props.history.push(`/recipes`);
+                });
         } else if (answer === 'healthyToday') {
-            console.log('healthyToday')
-            this.setState({
-                healthyIcon: 'icon icon-actions mr-2 healthyIcon'
-            });
+            RecipeService.addToHealthyToday(this.props.recipe.id)
+                .then((data) => {
+                    this.setState({
+                        healthyIcon: 'icon icon-actions mr-2 healthyIcon'
+                    });
+                });
         }
     }
 
     saveRecipe = () => {
-        console.log("-----------")
         if (this.state.saveIcon === faBookmarkRegular) {
             // save it
-            this.setState({saveIcon: faBookmark});
+            RecipeService.save(this.props.recipe.id)
+                .then((data) => {
+                    this.setState({saveIcon: faBookmark});
+                });
         } else {
             //unsave it
-            this.setState({saveIcon: faBookmarkRegular});
+            RecipeService.unsave(this.props.recipe.id)
+                .then((data) => {
+                    this.setState({saveIcon: faBookmarkRegular});
+                });
         }
     }
 
@@ -87,7 +103,7 @@ class RecipeView extends React.Component {
                     <div className={"row mt-4"}>
                         <div className={"col-3 pr-0"}>
                             <FontAwesomeIcon icon={faClock} className={"icon mr-2"}/>
-                            <span className={"icon-span"}>{this.props.recipe.time} min</span>
+                            <span className={"icon-span"}>{this.props.recipe.timeToPrepare} min</span>
                         </div>
                         <div className={"col-3 pr-0"}>
                             <FontAwesomeIcon icon={faUser} className={"icon mr-2"}/>
@@ -97,7 +113,6 @@ class RecipeView extends React.Component {
                             <span className={"stars-span my-auto mr-1"}>{this.props.recipe.rate}</span>
                             <ReactStars classNames={"stars"}
                                         count={5}
-                                // onChange={this.ratingChanged}
                                         size={24}
                                         activeColor="rgba(92, 184, 92, 1)"
                                         value={this.props.recipe.rate}
@@ -108,10 +123,10 @@ class RecipeView extends React.Component {
                         <div className={"col-12"}>
                             <div className={"row types m-0"}>
                                 {
-                                    this.props.recipe.types?.map((item, index) => {
+                                    this.props.recipe.types1?.map((item, index) => {
                                         return (
                                             <div className={"col-4 py-2 color-gray-lighter"}>
-                                                {this.props.recipe.types[index]}
+                                                {this.props.recipe.types1[index]}
                                             </div>
                                         );
                                     })
@@ -121,21 +136,34 @@ class RecipeView extends React.Component {
                     </div>
                     <div className={"row mt-4 mb-4"}>
                         <div className={"col-12 d-flex justify-content-end"}>
-                            <Link
-                                onClick={() => this.showModal('Did you had this meal today?', 'success', 'healthyToday')}>
-                                <FontAwesomeIcon icon={faUtensils} className={this.state.healthyIcon}/>
-                            </Link>
-                            <Link
-                                onClick={() => this.showModal('Do you want to delete the recipe?', 'danger', 'delete')}>
-                                <FontAwesomeIcon icon={faTimesCircle} className={"icon icon-actions mr-2 text-danger"}/>
-                            </Link>
-                            <Link onClick={() => this.props.onEdit(this.props.recipe.id)}
-                                  to={`/recipes/edit/${this.props.recipe.id}`}>
-                                <FontAwesomeIcon icon={faEdit} className={"icon icon-actions mr-2"}/>
-                            </Link>
-                            <Link onClick={this.saveRecipe}>
-                                <FontAwesomeIcon icon={this.state.saveIcon} className={"icon icon-actions mr-2"}/>
-                            </Link>
+                            {
+                                this.state.username !== undefined &&
+                                <Link
+                                    onClick={() => this.showModal('Did you had this meal today?', 'success', 'healthyToday')}>
+                                    <FontAwesomeIcon icon={faUtensils} className={this.state.healthyIcon}/>
+                                </Link>
+                            }
+                            {
+                                this.state.username !== undefined &&
+                                <Link
+                                    onClick={() => this.showModal('Do you want to delete the recipe?', 'danger', 'delete')}>
+                                    <FontAwesomeIcon icon={faTimesCircle}
+                                                     className={"icon icon-actions mr-2 text-danger"}/>
+                                </Link>
+                            }
+                            {
+                                this.state.username !== undefined &&
+                                <Link onClick={() => this.props.onEdit(this.props.recipe.id)}
+                                      to={`/recipes/edit/${this.props.recipe.id}`}>
+                                    <FontAwesomeIcon icon={faEdit} className={"icon icon-actions mr-2"}/>
+                                </Link>
+                            }
+                            {
+                                this.state.username !== undefined &&
+                                <Link onClick={this.saveRecipe}>
+                                    <FontAwesomeIcon icon={this.state.saveIcon} className={"icon icon-actions mr-2"}/>
+                                </Link>
+                            }
                             <Question show={this.state.show} handleClose={this.hideModal}
                                       question={this.state.question} color={this.state.color}
                                       action={this.state.action}>
@@ -157,9 +185,9 @@ class RecipeView extends React.Component {
                     <h5>Ingredients</h5>
                     <ul className="list-group">
                         {
-                            this.props.recipe.ingredients?.map((item, index) => {
+                            this.props.recipe.ingredients1?.map((item, index) => {
                                 return (
-                                    <li className="list-group-item">{item}</li>
+                                    <li className="list-group-item" key={index}>{item}</li>
                                 );
                             })
                         }

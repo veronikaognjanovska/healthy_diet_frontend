@@ -20,7 +20,7 @@ const RecipeComponent = (props) => {
                     <div className={"row"}>
                         <div className={"col-3 pr-0"}>
                             <FontAwesomeIcon icon={faClock} className={"icon mr-2"}/>
-                            <span className={"icon-span"}>{props.term.time} min</span>
+                            <span className={"icon-span"}>{props.term.timeToPrepare} min</span>
                         </div>
                         <div className={"col-4 pr-0"}>
                             <FontAwesomeIcon icon={faUser} className={"icon mr-2"}/>
@@ -40,7 +40,7 @@ const RecipeComponent = (props) => {
                 </div>
                 <div className={"col-12"}>
                     <div className={"row types m-0"}>
-                        {props.term.types?.map((item, index) => {
+                        {props.term.types1?.map((item, index) => {
                             return (
                                 <div className={"col-4"}>
                                     {props.term.types[index]}
