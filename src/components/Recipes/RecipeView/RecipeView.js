@@ -137,14 +137,15 @@ class RecipeView extends React.Component {
                     <div className={"row mt-4 mb-4"}>
                         <div className={"col-12 d-flex justify-content-end"}>
                             {
-                                this.state.username !== undefined &&
+                                UserService.getLoggedInUser() !== undefined &&
                                 <Link
                                     onClick={() => this.showModal('Did you had this meal today?', 'success', 'healthyToday')}>
                                     <FontAwesomeIcon icon={faUtensils} className={this.state.healthyIcon}/>
                                 </Link>
                             }
                             {
-                                this.state.username !== undefined &&
+                                UserService.getLoggedInUser() !== undefined &&
+                                UserService.getLoggedInUser() === this.props.recipe?.by &&
                                 <Link
                                     onClick={() => this.showModal('Do you want to delete the recipe?', 'danger', 'delete')}>
                                     <FontAwesomeIcon icon={faTimesCircle}
@@ -152,14 +153,15 @@ class RecipeView extends React.Component {
                                 </Link>
                             }
                             {
-                                this.state.username !== undefined &&
+                                UserService.getLoggedInUser() !== undefined &&
+                                UserService.getLoggedInUser() === this.props.recipe?.by &&
                                 <Link onClick={() => this.props.onEdit(this.props.recipe.id)}
                                       to={`/recipes/edit/${this.props.recipe.id}`}>
                                     <FontAwesomeIcon icon={faEdit} className={"icon icon-actions mr-2"}/>
                                 </Link>
                             }
                             {
-                                this.state.username !== undefined &&
+                                UserService.getLoggedInUser() !== undefined &&
                                 <Link onClick={this.saveRecipe}>
                                     <FontAwesomeIcon icon={this.state.saveIcon} className={"icon icon-actions mr-2"}/>
                                 </Link>

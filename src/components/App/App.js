@@ -118,7 +118,7 @@ class App extends Component {
     };
 
     getHealthyToday = (date) => {
-        RecipeService.getHealthyToday(this.state.activeUser, date)
+        RecipeService.getHealthyToday(date)
             .then((data) => {
                 this.setState({
                     healthyData: data.data

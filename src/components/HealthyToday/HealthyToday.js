@@ -14,9 +14,10 @@ class HealthyToday extends React.Component {
         let year = newDate.getFullYear();
         this.state = {
             date: year+"-"+month+"-"+date,
-            showToday:-1
+            showToday:-1,
+            total: this.props.healthyData?.map(item=>item.recipeId.calories).reduce((x,z) => x + z, 0)
         }
-
+        console.log( this.props.healthyData?.map(item=>item.recipeId.calories).reduce((x,z) => x + z, 0))
     }
 
     viewPast = (today) => {
@@ -36,7 +37,7 @@ class HealthyToday extends React.Component {
                 showToday:1,
                 date:datetime
             });
-            this.props.onViewDate("12-09-2021");
+            this.props.onViewDate(datetime);
         }
     }
 
@@ -56,8 +57,8 @@ class HealthyToday extends React.Component {
                             this.props.healthyData?.map((item, index) => {
                                 return (
                                     <tr>
-                                        <td>{item.recipe}</td>
-                                        <td>{item.calories}</td>
+                                        <td>{item.recipeId.title}</td>
+                                        <td>{item.recipeId.calories}</td>
                                     </tr>
                                 );
                             })
@@ -67,7 +68,8 @@ class HealthyToday extends React.Component {
                 </div>
                 <div className={"col-12 d-flex justify-content-end mb-3"}>
                     <span className={"p-2"}>Total Calories</span>
-                    <span className={"span-number text-white p-2"}>100</span>
+                    <span className={"span-number text-white p-2"}>
+                        {this.props.healthyData?.map(item=>item.recipeId.calories).reduce((x,z) => x + z, 0)}</span>
                 </div>
                 <div className="input-group">
                     <input type="date" name="birthday"  className="form-control" id="datetime"/>

@@ -38,36 +38,18 @@ const RecipeService = {
             'timeToPrepare': timeToPrepare,
             'people': people,
             'types': types,
-            'by': "me",
+            'by': UserService.getLoggedInUser(),
             'calories': calories,
             'preparation': preparation,
             'ingredients': ingredients
         });
     },
 
-    getHealthyToday: (user, date) => {
+    getHealthyToday: (date) => {
         if (date === undefined) {
-            return Promise.resolve({
-                data: [
-                    {recipe: "r", calories: "c"},
-                    {recipe: "r2", calories: "c"},
-                    {recipe: "2r", calories: "c"},
-                    {recipe: "r2", calories: "c"},
-                    {recipe: "2r", calories: "c"}
-                ]
-            });
-            return axios.get(`/healthy/${user}`);
+            return axios.get(`/healthy/${UserService.getLoggedInUser()}`);
         } else {
-            return Promise.resolve({
-                data: [
-                    {recipe: "r", calories: "c"},
-                    {recipe: "r", calories: "c"},
-                    {recipe: "r", calories: "c"},
-                    {recipe: "r", calories: "c"},
-                    {recipe: "r", calories: "c"}
-                ]
-            });
-            return axios.get(`/healthy/${user}/${date}`);
+            return axios.get(`/healthy/${UserService.getLoggedInUser()}/${date}`);
         }
     },
 
@@ -84,7 +66,7 @@ const RecipeService = {
     },
 
     unsave: (id) => {
-        return axios.get(`/recipes/unsave/${UserService.getLoggedInUser()}/${id}`);
+        return axios.put(`/recipes/unsave/${UserService.getLoggedInUser()}/${id}`);
     },
 
     delete: (id) => {

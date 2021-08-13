@@ -12,7 +12,6 @@ class RecipeEdit extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("-----------------")
         RecipeEdit.ingredients = this.props.recipe?.ingredients1 ? this.props.recipe.ingredients1 : [];
         this.state = {
             ingredients: [],
@@ -301,7 +300,7 @@ class RecipeEdit extends React.Component {
                             <h5>Ingredients</h5>
                             <ul className="list-group mb-3">
                                 {
-                                    RecipeEdit.ingredients1?.map((item, index) => {
+                                    RecipeEdit.ingredients?.map((item, index) => {
                                         return (
                                             <li className={"list-group-item p-2"} key={index}>
                                                 <div className={"d-inline-block"} id={"ingredient" + index}>{item}</div>

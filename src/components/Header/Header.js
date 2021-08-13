@@ -8,7 +8,6 @@ import UserService from "../../service/UserService";
 
 const Header = (props) => {
 
-    let username = UserService.getLoggedInUser();
 
     return (
         <header className={"bg-my"}>
@@ -24,28 +23,28 @@ const Header = (props) => {
                         <Link className={"nav-link"} to={`/recipes`}
                               onClick={() => props.onHome()}>HOME</Link>
                         {
-                            username !== undefined &&
+                            UserService.getLoggedInUser() !== undefined &&
                             <Link className={"nav-link"} to={`/recipes/add`}>ADD NEW RECIPE</Link>
                         }
                         {
-                            username !== undefined &&
+                            UserService.getLoggedInUser() !== undefined &&
                             <Link className={"nav-link"} to={`/profile`}>PROFILE</Link>
                         }
                         {
-                            username !== undefined &&
+                            UserService.getLoggedInUser() !== undefined &&
                             <Link className={"nav-link"} to={`/healthy`}
                                   onClick={() => props.onHealthyToday()}>HEALTHY TODAY</Link>
                         }
                         {
-                            username === undefined &&
+                            UserService.getLoggedInUser() === undefined &&
                             <Link className={"nav-link"} to={`/login`}>LOG IN</Link>
                         }
                         {
-                            username === undefined &&
+                            UserService.getLoggedInUser() === undefined &&
                             <Link className={"nav-link"} to={`/register`}>REGISTER</Link>
                         }
                         {
-                            username !== undefined &&
+                            UserService.getLoggedInUser() !== undefined &&
                             <Link className={"nav-link"} to={`/logout`}>LOGOUT</Link>
                         }
                     </Nav>
