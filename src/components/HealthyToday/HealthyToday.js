@@ -43,7 +43,7 @@ class HealthyToday extends React.Component {
 
     render() {
         return (
-            <div className={"row px-4 form-part-1 mx-auto"}>
+            <div className={"row px-4 form-part-1 mx-auto mb-5"}>
                 <div className={"col-12 d-flex justify-content-center mt-3 mb-3"}>
                     <h4>HealtyToday</h4>
                 </div>

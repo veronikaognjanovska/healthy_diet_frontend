@@ -5,6 +5,7 @@ import {faMinusCircle, faPlusCircle} from "@fortawesome/free-solid-svg-icons";
 import '../Recipes.css';
 import {faClock, faUser} from "@fortawesome/free-regular-svg-icons";
 import RecipeService from "../../../service/RecipeService";
+import NotificationService from "../../../notifications/NotificationService";
 
 class RecipeEdit extends React.Component {
 
@@ -50,14 +51,20 @@ class RecipeEdit extends React.Component {
             RecipeService.editRecipe(this.props.recipe.id, title, timeToPrepare, people, types1, calories, preparation, ingredients)
                 .then((data) => {
                     this.props.onSubmit(data.data.id);
+                    NotificationService.success('Success!', 'Recipe edited successfully!')
                     this.props.history.push(`/recipes/view/${data.data.id}`);
-                })
+                }).catch(e => {
+                NotificationService.danger('Error!', 'Recipe can not be edited!')
+            });
         } else {
             RecipeService.addRecipe(title, timeToPrepare, people, types1, calories, preparation, ingredients)
                 .then((data) => {
                     this.props.onSubmit(data.data.id);
+                    NotificationService.success('Success!', 'Recipe saved successfully!')
                     this.props.history.push(`/recipes/view/${data.data.id}`);
-                })
+                }).catch(e => {
+                NotificationService.danger('Error!', 'Recipe can not be saved!')
+            });
         }
     }
 
@@ -76,6 +83,7 @@ class RecipeEdit extends React.Component {
         var ingredient = document.getElementById("addIngredientInput").value;
         if (ingredient.trim() !== "") {
             RecipeEdit.ingredients.push(ingredient);
+            document.getElementById("addIngredientInput").value = '';
             this.setState({});
         }
 
@@ -95,7 +103,7 @@ class RecipeEdit extends React.Component {
 
     render() {
         return (
-            <div className={"row px-4"}>
+            <div className={"row px-4 margin-bottom"}>
                 <div className={"col-12 d-flex justify-content-center mt-3 mb-3"}>
                     <h4>Recipe</h4>
                 </div>
@@ -104,7 +112,7 @@ class RecipeEdit extends React.Component {
                         this.props.recipe?.id &&
                         <Link className={"btn btn-success btn-green float-left py-1 px-2"}
                               to={`/recipes/view/${this.props.recipe.id}`}
-                                onClick={this.props.onBack}>Back</Link>
+                              onClick={this.props.onBack}>Back</Link>
                     }
                     {
                         this.props.recipe === undefined &&
@@ -155,7 +163,7 @@ class RecipeEdit extends React.Component {
                                         <FontAwesomeIcon icon={faClock} className={"text-white"}/>
                                     </button>
                                 </div>
-                                <input type="text"
+                                <input type="number"
                                        className="form-control"
                                        id="timeToPrepare"
                                        name="timeToPrepare"
@@ -177,7 +185,7 @@ class RecipeEdit extends React.Component {
                                         <FontAwesomeIcon icon={faUser} className={"text-white"}/>
                                     </button>
                                 </div>
-                                <input type="text"
+                                <input type="number"
                                        className="form-control"
                                        id="people"
                                        name="people"
@@ -279,7 +287,7 @@ class RecipeEdit extends React.Component {
                             </div>
                         </div>
                         <div className="input-group">
-                            <input type="text"
+                            <input type="number"
                                    className="form-control"
                                    id="calories"
                                    name="calories"

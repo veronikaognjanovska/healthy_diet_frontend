@@ -23,6 +23,7 @@ class RecipeView extends React.Component {
             healthyIcon: 'icon icon-actions mr-2',
             username: UserService.getLoggedInUser()
         }
+        console.log(this.props.recipe)
     }
 
     showModal = (question, color, action) => {
@@ -78,7 +79,7 @@ class RecipeView extends React.Component {
 
     render() {
         return (
-            <div className={"row"}>
+            <div className={"row margin-bottom"}>
                 <div className={"col-12 d-flex justify-content-center mt-3 mb-3"}>
                     <h4>{this.props.recipe.title}</h4>
                 </div>
@@ -97,7 +98,7 @@ class RecipeView extends React.Component {
                                 @{this.props.recipe.by}</Link>
                         </div>
                         <div className={"col-6 color-gray text-right"}>
-                            <tspan>Time: {this.props.recipe.datetime}</tspan>
+                            <tspan>Time: {this.props.recipe.dateTime}</tspan>
                         </div>
                     </div>
                     <div className={"row mt-4"}>
@@ -139,6 +140,7 @@ class RecipeView extends React.Component {
                             {
                                 UserService.getLoggedInUser() !== undefined &&
                                 <Link
+                                    data-toggle="tooltip" data-placement="bottom" title="Add to Healthy diet"
                                     onClick={() => this.showModal('Did you had this meal today?', 'success', 'healthyToday')}>
                                     <FontAwesomeIcon icon={faUtensils} className={this.state.healthyIcon}/>
                                 </Link>
@@ -147,6 +149,7 @@ class RecipeView extends React.Component {
                                 UserService.getLoggedInUser() !== undefined &&
                                 UserService.getLoggedInUser() === this.props.recipe?.by &&
                                 <Link
+                                    data-toggle="tooltip" data-placement="bottom" title="Delete recipe"
                                     onClick={() => this.showModal('Do you want to delete the recipe?', 'danger', 'delete')}>
                                     <FontAwesomeIcon icon={faTimesCircle}
                                                      className={"icon icon-actions mr-2 text-danger"}/>
@@ -156,13 +159,15 @@ class RecipeView extends React.Component {
                                 UserService.getLoggedInUser() !== undefined &&
                                 UserService.getLoggedInUser() === this.props.recipe?.by &&
                                 <Link onClick={() => this.props.onEdit(this.props.recipe.id)}
+                                      data-toggle="tooltip" data-placement="bottom" title="Edit recipe"
                                       to={`/recipes/edit/${this.props.recipe.id}`}>
                                     <FontAwesomeIcon icon={faEdit} className={"icon icon-actions mr-2"}/>
                                 </Link>
                             }
                             {
                                 UserService.getLoggedInUser() !== undefined &&
-                                <Link onClick={this.saveRecipe}>
+                                <Link onClick={this.saveRecipe}
+                                      data-toggle="tooltip" data-placement="bottom" title="Save recipe">
                                     <FontAwesomeIcon icon={this.state.saveIcon} className={"icon icon-actions mr-2"}/>
                                 </Link>
                             }

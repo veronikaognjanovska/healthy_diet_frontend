@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye} from "@fortawesome/free-regular-svg-icons";
 import {faAt} from "@fortawesome/free-solid-svg-icons";
 import UserService from "../../service/UserService";
+import NotificationService from "../../notifications/NotificationService";
 
 class Login extends React.Component {
 
@@ -22,10 +23,12 @@ class Login extends React.Component {
         let password = document.getElementById('password').value;
         UserService.login(username,password)
             .then((data) => {
-                console.log(data)
                 UserService.setLoggedInUser(data.data);
+                NotificationService.success('Success!', 'User logged in successfully!')
                 this.props.history.push(`/recipes`);
-            });
+            }).catch(e=>{
+                NotificationService.danger('Error!', 'User can not log in!')
+        });
     }
 
     loginWithFacebook = () => {

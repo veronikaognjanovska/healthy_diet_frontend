@@ -43,7 +43,7 @@ const RecipeComponent = (props) => {
                         {props.term.types1?.map((item, index) => {
                             return (
                                 <div className={"col-4"}>
-                                    {props.term.types[index]}
+                                    {props.term.types1[index]}
                                 </div>
                             );
                         })}

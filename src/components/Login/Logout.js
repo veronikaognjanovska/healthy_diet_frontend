@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import UserService from "../../service/UserService";
 import '../App/App.css';
 import './Login.css';
+import NotificationService from "../../notifications/NotificationService";
 
 class Logout extends Component {
 
@@ -10,8 +11,10 @@ class Logout extends Component {
         try {
             UserService.setLoggedInUser(null);
             message = 'User is logged out!';
+            NotificationService.success('Success!', 'User logged out successfully!')
         } catch (e) {
             message = 'User can not log out';
+            NotificationService.danger('Error!', 'User can not log out!')
         }
         return message;
     };

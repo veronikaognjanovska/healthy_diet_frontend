@@ -25,7 +25,7 @@ const RecipeService = {
             'timeToPrepare': timeToPrepare,
             'people': people,
             'types': types,
-            'by': "me",
+            'by': UserService.getLoggedInUser(),
             'calories': calories,
             'preparation': preparation,
             'ingredients': ingredients

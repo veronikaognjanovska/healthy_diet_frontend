@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye} from "@fortawesome/free-regular-svg-icons";
 import {faAt} from "@fortawesome/free-solid-svg-icons";
 import UserService from "../../service/UserService";
+import NotificationService from "../../notifications/NotificationService";
 
 class Register extends React.Component {
 
@@ -25,8 +26,11 @@ class Register extends React.Component {
         let birthday = document.getElementById('birthday').value;
         UserService.register(username, password, nameSurname, email, birthday)
             .then((data) => {
+                NotificationService.success('Success!', 'User registered successfully!')
                 this.props.history.push(`/login`);
-            })
+            }).catch(e=>{
+                NotificationService.danger('Error!', 'User can not register!')
+        })
     }
     registerWithFacebook = () => {
         console.log("not yet ")
